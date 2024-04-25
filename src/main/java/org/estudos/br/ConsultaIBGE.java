@@ -16,7 +16,11 @@ public class ConsultaIBGE {
 
     // URL base da API do IBGE para distritos
     private static final String DISTRITOS_API_URL = "https://servicodados.ibge.gov.br/api/v1/localidades/distritos/";
+    
+    // URL base da API do IBGE para regiões
+    private static final String REGIOES_API_URL = "https://servicodados.ibge.gov.br/api/v1/localidades/regioes/";
 
+    
     /**
      * Método para consultar informações de um estado específico.
      *
@@ -58,6 +62,31 @@ public class ConsultaIBGE {
     public static String consultarDistrito(int id) throws IOException {
         // Monta a URL completa para consulta do distrito específico
         URL url = new URL(DISTRITOS_API_URL + id);
+
+        // Abre uma conexão HTTP com a URL
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        // Define o método da requisição como GET
+        connection.setRequestMethod("GET");
+
+        // Prepara para ler a resposta da conexão
+        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        String inputLine;
+        StringBuilder response = new StringBuilder();
+
+        // Lê cada linha da resposta e a adiciona ao StringBuilder
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        }
+        in.close();
+
+        // Retorna a resposta da API como uma string
+        return response.toString();
+    }
+
+
+    public static String consultarEstadosRegiao(int id) throws IOException {
+        // Monta a URL completa para consulta dos estados da região específica
+        URL url = new URL(REGIOES_API_URL + id + "/estados");
 
         // Abre uma conexão HTTP com a URL
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
